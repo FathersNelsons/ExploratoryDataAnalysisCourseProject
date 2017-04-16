@@ -12,20 +12,6 @@ if (!exists("NEI") || !exists("SCC") ) {
     SCC <- readRDS("Source_Classification_Code.rds")
 }
 
-##  Plot 1
-#   Aggregate the sum of each year as a factor
-if (!exists("NEI_years")){
-    NEI_years <- aggregate(Emissions ~ year, NEI, sum)
-}
-
-png(filename = "plot1.png")
-plot(NEI_years$year, 
-     NEI_years$Emissions, pch = 20, 
-     main = "Total emissions by year", 
-     xlab = "Year",
-     ylab = "Total Emissions")
-dev.off()
-
 ##  Plot 2
 #   Do the same thing, but now do it for just Baltimore City
 if (!exists("NEI_year_baltimore")) {
@@ -39,19 +25,3 @@ plot(NEI_year_baltimore$year,
      xlab = "Year",
      ylab = "Total Emissions")
 dev.off()
-
-##  Plot 3
-#   
-if (!exists("NEI_types")) {
-    NEI_types <- split(subset(NEI, NEI$fips == "24510"), NEI$type)
-}
-
-qplot(as.factor(year),
-      Emissions,
-      data = subset(NEI, NEI$fips == "24510"), 
-      facets=.~type) + stat_summary(data = subset(NEI, NEI$fips == "24510"), 
-               fun.y = sum, 
-               geom = "point", 
-               color = "red")
-
-ggsave("plot3.png", device = "png")
